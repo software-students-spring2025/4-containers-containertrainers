@@ -37,13 +37,19 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        user = db.accounts.find_one({username: username})
-        if user and check_password_hash(user.password, password):
-            session['user_id'] = user.id
-            return redirect(url_for('index'))
+        user = db.accounts.find_one({'username': username})
+
+        if user and check_password_hash(user['password'], password):
+            session['user_id'] = str(user['_id'])
+            return redirect(url_for('profile'))
         else:
             return render_template('index.html', message="Invalid username or password")
     return render_template('login.html')
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
 @app.route('/logout')
 def logout():
     session.clear()

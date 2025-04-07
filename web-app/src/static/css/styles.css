@@ -11,6 +11,21 @@
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
+#login, #register {
+    background-color: palevioletred;
+    border-radius: 10%;
+    padding: 5%;
+    margin: 5%;
+    margin-top: 15%;
+}
+
+.index {
+    font-size: 3em;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    border-width: 0;
+    background-color: palevioletred;
+}
+
 .error {
     display: none;
 }
