@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Speechily Audio Recorder</title>
+</head>
+<body>
+    <h1>Speechily Audio Recorder</h1>
+    <p>Record speech for analysis (stops after 1 minute)</p>
+    <p>hit record, the recording sign will go away when you hit stop</p>
+
+    <button id="recordBtn">Record</button>
+    <button id="stopBtn" disabled>Stop</button>
+    <div id="status">Recording...</div>
+
+    <!-- recording from get user media example?  use getusermedia-->
+    <script>
+
+        const recordBtn = document.getElementById('recordBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const status = document.getElementById('status');
+
+        // Variables
+        let recorder;
+        let chunks = [];
+        let timer;
+
+        // Start recording
+        recordBtn.onclick = function() {
+            chunks = [];
+            navigator.mediaDevices.getUserMedia({audio: true})
+                .then(stream => {
+                    recorder = new MediaRecorder(stream);
+                    recorder.ondataavailable = e => chunks.push(e.data);
+                    recorder.onstop = saveRecording;
+
+                    // Start recording
+                    recorder.start();
+                    //the div displayed to let user know
+                    status.style.display;
+                    recordBtn.disabled = true;
+                    stopBtn.disabled = false;
+
+                    // Auto-stop after 1 minute
+                    timer = setTimeout(() => stopBtn.click(), 60000);
+                })
+                //.catch(err => alert('Please allow microphone access'));
+        };
+
+        // Stop recording
+        stopBtn.onclick = function() {
+            if (recorder && recorder.state === 'recording') {
+                clearTimeout(timer);
+                recorder.stop();
+                recorder.stream.getTracks().forEach(track => track.stop());
+                status.style.display = 'none';
+                recordBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        };
+
+        // auto save recording after done
+        // looks like it needs to be web, not mp3
+        function saveRecording() {
+            const blob = new Blob(chunks, {type: 'audio/webm'});
+            const formData = new FormData();
+            formData.append('audio', blob, 'recording.webm');
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+        }
+    </script>
+</body>
+</html>
