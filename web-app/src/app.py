@@ -77,15 +77,15 @@ def logout():
     return render_template("index.html")
 
 
-#audio recording part
+# audio recording part
 RECORDINGS_FOLDER = '/app/recordings'
 os.makedirs(RECORDINGS_FOLDER, exist_ok=True)
 
-#look for the next file, file numbers are sequential
+# look for the next file, file numbers are sequential
 def get_next_file_number():
     """this gets the next file number"""
     existing_files = glob.glob(os.path.join(RECORDINGS_FOLDER, "recording_*webm"))
-    #if no recordings
+    # if no recordings
     if not existing_files:
         return 1
     numbers = []
@@ -102,13 +102,13 @@ def get_next_file_number():
 #main page
 @app.route('/record')
 def index():
-    ''' flask render the main page'''
+    """ flask render the main page"""
     return render_template('record.html')
 
-#uploads to the volume
+# uploads to the volume
 @app.route('/upload', methods=['POST'])
 def upload_audio():
-    '''see if the file is in the resquest get the file into the volume'''
+    """see if the file is in the resquest get the file into the volume"""
     if 'audio' not in request.files:
         return jsonify({'success': False})
 
