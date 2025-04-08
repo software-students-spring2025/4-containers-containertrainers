@@ -78,8 +78,9 @@ def logout():
 
 
 # audio recording part
-RECORDINGS_FOLDER = '/app/recordings'
+RECORDINGS_FOLDER = "/app/recordings"
 os.makedirs(RECORDINGS_FOLDER, exist_ok=True)
+
 
 # look for the next file, file numbers are sequential
 def get_next_file_number():
@@ -92,27 +93,29 @@ def get_next_file_number():
     for filename in existing_files:
         try:
             base = os.path.basename(filename)
-            num_str = base.split('_')[1].split('.')[0]
+            num_str = base.split("_")[1].split(".")[0]
             numbers.append(int(num_str))
         except (IndexError, ValueError):
             continue
 
     return max(numbers) + 1 if numbers else 1
 
-#main page
-@app.route('/record')
+
+# main page
+@app.route("/record")
 def index():
-    """ flask render the main page"""
-    return render_template('record.html')
+    """flask render the main page"""
+    return render_template("record.html")
+
 
 # uploads to the volume
-@app.route('/upload', methods=['POST'])
+@app.route("/upload", methods=["POST"])
 def upload_audio():
     """see if the file is in the resquest get the file into the volume"""
-    if 'audio' not in request.files:
-        return jsonify({'success': False})
+    if "audio" not in request.files:
+        return jsonify({"success": False})
 
-    audio_file = request.files['audio']
+    audio_file = request.files["audio"]
 
     next_number = get_next_file_number()
 
@@ -121,8 +124,7 @@ def upload_audio():
     filepath = os.path.join(RECORDINGS_FOLDER, filename)
     audio_file.save(filepath)
 
-    return jsonify({'success':True, 'filename': filename})
-
+    return jsonify({"success": True, "filename": filename})
 
 
 if __name__ == "__main__":
