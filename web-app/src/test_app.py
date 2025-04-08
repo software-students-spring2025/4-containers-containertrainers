@@ -22,7 +22,7 @@ def client():
     with app.test_client() as client:
         yield client
 
- '''Test that the home page loads successfully.'''
+'''Test that the home page loads successfully.'''
 def test_home_route(client):
     response = client.get("/")
     assert response.status_code == 200
