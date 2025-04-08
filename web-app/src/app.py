@@ -1,9 +1,9 @@
 """App"""
 import os
-import db
 from flask import Flask, render_template, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson.objectid import ObjectId
+import db
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)
@@ -49,8 +49,8 @@ def login():
         if user and check_password_hash(user['password'], password):
             session['user_id'] = str(user['_id'])
             return redirect(url_for('profile'))
-        else:
-            return render_template('index.html', message="Invalid username or password")
+
+        return render_template('index.html', message="Invalid username or password")
     return render_template('login.html')
 
 
@@ -62,8 +62,8 @@ def profile():
         user = db.accounts.find_one({'_id': user_id})
         username = user['username']
         return render_template('profile.html', username=username)
-    else:
-        return redirect(url_for('login'))
+
+    return redirect(url_for('login'))
 
 
 @app.route('/logout')
