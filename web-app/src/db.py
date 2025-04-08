@@ -1,12 +1,13 @@
 """Configuring Database"""
+
 import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
 load_dotenv()
 
-MONGO_URI = os.getenv('MONGO_URI')
-MONGO_DBNAME = str(os.getenv('MONGO_DBNAME'))
+MONGO_URI = os.getenv("MONGO_URI")
+MONGO_DBNAME = str(os.getenv("MONGO_DBNAME"))
 
 connection = MongoClient(MONGO_URI)
 db = connection[MONGO_DBNAME]
@@ -19,7 +20,7 @@ acc_validator = {
             "username": {"bsonType": "string"},
             "password": {"bsonType": "string"},
             "messages": {"bsonType": "string"},
-        }
+        },
     }
 }
 
@@ -29,7 +30,7 @@ mess_validator = {
         "required": ["message"],
         "properties": {
             "message": {"bsonType": "string"},
-        }
+        },
     }
 }
 
