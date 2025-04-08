@@ -6,6 +6,10 @@
     </head>
     <body>
         <script defer src="../static/js/index.js"></script>
+        {% if message %}
+        <p style="color: red; text-align: center;">{{ message }}</p>
+        {% endif %}
+
         <div id="container">
             <header>
                 <h1>Speech2Text</h1>
