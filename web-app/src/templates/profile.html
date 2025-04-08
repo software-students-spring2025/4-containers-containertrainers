@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../static/css/styles.css">
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <script defer src="../static/js/index.js"></script>
+        <div id="container">
+            <header>
+                <h1>Speech2Text</h1>
+                <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="150" cy="100" r="100" />
+                    <text id="user-icon" x="150" y="100" text-anchor="middle" dominant-baseline="middle" font-size="50" fill="white"> {{ username }} </text>
+                </svg>
+                <div id="logout">
+                    <form action="/logout">
+                        <button id="logout-btn" type="submit">Logout</button>
+                    </form>
+                </div>
+            </header>
+            
+        </div>
+    </body>
+</html>

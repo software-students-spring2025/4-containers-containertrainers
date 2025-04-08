@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../static/css/styles.css">
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <script defer src="../static/js/index.js"></script>
+        <div id="container">
+            <header>
+                <h1>Speech2Text</h1>
+            </header>
+            <div id='actions'>
+                <form method="POST" action="/signup" class="auth-form">
+                    Username: <input autocomplete="off" type="text" name="username" value="">
+                    Password: <input autocomplete="off" type="text" name="password" value="">
+                    <button type="submit">Register</button>
+                    <p id="exists" class="error">Username already exists.</p>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
