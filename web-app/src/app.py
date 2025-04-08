@@ -18,7 +18,7 @@ def signup():
         password = request.form.get('password')
         if not (username and password):
             return render_template('index.html', message="All fields are required")
-        if db.accounts.find_one({username: username}):
+        if db.accounts.find_one({'username': username}):
             return render_template('index.html', message="Account with this username already created.")
         hashed_password = generate_password_hash(password)
             
@@ -48,8 +48,13 @@ def login():
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html')
-
+    if 'user_id' in session:
+        user_id = ObjectId(session['user_id'])
+        user = db.accounts.find_one({'_id': user_id})
+        username = user['username']
+        return render_template('profile.html', username=username)
+    else:
+        return redirect(url_for('login'))
 @app.route('/logout')
 def logout():
     session.clear()

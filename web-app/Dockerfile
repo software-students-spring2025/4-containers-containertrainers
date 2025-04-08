@@ -16,7 +16,7 @@ ADD . .
 EXPOSE 3000
 
 # environment variables
-ENV MONGO_URI=mongodb://localhost:27017/
+ENV MONGO_URI=mongodb://db:27017/
 ENV MONGO_DBNAME=speech2text
 ENV PORT=3000
 

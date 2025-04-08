@@ -1,8 +1,14 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
 #container {
     width: 100%;
     height: 100%;
 
     display: flex;
+    flex-direction: column;
 
     justify-content: center;
     align-items: center;
@@ -11,10 +17,23 @@
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
+header {
+    background-color: palevioletred;
+    width: 100%;
+    
+}
+
+#actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 15%;
+}
+
 #login, #register {
     background-color: palevioletred;
     border-radius: 10%;
-    padding: 5%;
+    padding: 20%;
     margin: 5%;
     margin-top: 15%;
 }
@@ -30,3 +49,23 @@
     display: none;
 }
 
+.auth-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-form input, .auth-form button {
+    margin: 2%;
+}
+
+svg {
+    width: 10%;
+    margin-bottom: 1%;
+}
+
+#logout-btn {
+    color: white;
+    background-color: gray;
+    padding: 1%;
+    margin: 1%;
+}
