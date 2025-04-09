@@ -2,7 +2,10 @@
 
 import os
 import glob
+
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+
+from summarize_function import summarize_text_access
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson.objectid import ObjectId
@@ -125,6 +128,7 @@ def upload_audio():
     audio_file.save(filepath)
 
     return jsonify({"success": True, "filename": filename})
+
 
 
 if __name__ == "__main__":
