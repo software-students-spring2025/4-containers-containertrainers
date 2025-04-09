@@ -1,3 +1,6 @@
+# pylint: disable=import-error
+
+
 '''Test App'''
 
 import importlib.util
@@ -18,23 +21,23 @@ app = app_module.app
 
 
 @pytest.fixture
-def test_test_test_client():
+def test_client():
     '''Fixture for Flask test client.'''
     app.config["TESTING"] = True
-    with app.test_test_client() as test_client:
+    with app.test_client() as test_client:
         yield test_client
 
-def test_home_route(test_test_client):
+def test_home_route(test_client):
     '''Test that the home page loads successfully.'''
-    response = test_test_client.get("/")
+    response = test_client.get("/")
     assert response.status_code == 200
 
-def test_signup_get(test_test_client):
+def test_signup_get(test_client):
     '''Test that the signup page loads successfully on GET request.'''
-    response = test_test_client.get("/signup")
+    response = test_client.get("/signup")
     assert response.status_code == 200
 
-def test_signup_post_success(test_test_client):
+def test_signup_post_success(test_client):
     '''Test successful signup with a new username and password.'''
     with patch.object(app_module.db, "accounts") as mock_db:
         mock_db.find_one.return_value = None
