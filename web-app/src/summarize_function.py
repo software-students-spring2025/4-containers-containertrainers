@@ -1,9 +1,7 @@
 """This contains the text summarizer function to summarize
 the text that is gotten from speech to text"""
 
-import numpy
 import nltk
-import sumy
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lex_rank import LexRankSummarizer
