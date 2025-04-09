@@ -13,6 +13,7 @@ dotenv = "*"
 numpy = "*"
 nltk = "*"
 sumy = "*"
+pytest = "*"
 
 [dev-packages]
 
