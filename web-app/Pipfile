@@ -10,6 +10,9 @@ flask-login = "*"
 flask = "*"
 pymongo = "*"
 dotenv = "*"
+numpy = "*"
+nltk = "*"
+sumy = "*"
 
 [dev-packages]
 
