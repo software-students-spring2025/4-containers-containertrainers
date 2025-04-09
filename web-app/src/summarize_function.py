@@ -1,4 +1,3 @@
-# pylint: disable=import-error,unused-import
 
 
 """This contains the text summarizer function to summarize, imports are in requirements.txt already
@@ -6,6 +5,7 @@ there
 no true import errors
 the text that is gotten from speech to text"""
 
+# pylint: disable=import-error,unused-import
 import nltk
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
