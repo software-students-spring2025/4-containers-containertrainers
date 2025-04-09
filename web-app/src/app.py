@@ -2,11 +2,15 @@
 
 import os
 import glob
+
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson.objectid import ObjectId
 import db
+
+from summarize_function import summarize_text_access
+
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)
@@ -125,6 +129,11 @@ def upload_audio():
     audio_file.save(filepath)
 
     return jsonify({"success": True, "filename": filename})
+
+
+def summarized_text(sometext):
+    """summarized text access funciton"""
+    return summarize_text_access(sometext)
 
 
 if __name__ == "__main__":
