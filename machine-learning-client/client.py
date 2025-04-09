@@ -1,7 +1,9 @@
-import speech_recognition as sr
 from pymongo import MongoClient
 from datetime import datetime, timezone
+import speech_recognition as sr
 from transformers import pipeline
+
+"""This module handles speech recognition and logging for transcriptions."""
 
 recognizer = sr.Recognizer()
 summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", device=-1)
@@ -15,6 +17,7 @@ mic = sr.Microphone()
 print("Say something...")
 
 def transcribe_and_summarize():
+    """Transcribes audio from the given file path using SpeechRecognition."""
     with mic as source:
         print("🎤 Speak now...")
         audio = recognizer.listen(source)
