@@ -2,7 +2,7 @@
 # pylint: disable=import-error,redefined-outer-name
 
 
-'''Test App'''
+"""Test App"""
 
 import importlib.util
 import sys
@@ -23,102 +23,114 @@ app = app_module.app
 
 @pytest.fixture
 def test_client():
-    '''Fixture for Flask test client.'''
+    """Fixture for Flask test client."""
     app.config["TESTING"] = True
     with app.test_client() as test_client:
         yield test_client
 
+
 def test_home_route(test_client):
-    '''Test that the home page loads successfully.'''
+    """Test that the home page loads successfully."""
     response = test_client.get("/")
     assert response.status_code == 200
 
+
 def test_signup_get(test_client):
-    '''Test that the signup page loads successfully on GET request.'''
+    """Test that the signup page loads successfully on GET request."""
     response = test_client.get("/signup")
     assert response.status_code == 200
 
+
 def test_signup_post_success(test_client):
-    '''Test successful signup with a new username and password.'''
+    """Test successful signup with a new username and password."""
     with patch.object(app_module.db, "accounts") as mock_db:
         mock_db.find_one.return_value = None
-        response = test_client.post("/signup", data={
-            "username": "testuser",
-            "password": "testpass"
-        }, follow_redirects=True)
+        response = test_client.post(
+            "/signup",
+            data={"username": "testuser", "password": "testpass"},
+            follow_redirects=True,
+        )
         assert response.status_code == 200
         mock_db.insert_one.assert_called_once()
 
+
 def test_signup_post_existing_user(test_client):
-    '''Test signup with an already existing username.'''
+    """Test signup with an already existing username."""
     with patch.object(app_module.db, "accounts") as mock_db:
         mock_db.find_one.return_value = {"username": "testuser"}
-        response = test_client.post("/signup", data={
-            "username": "testuser",
-            "password": "testpass"
-        })
+        response = test_client.post(
+            "/signup", data={"username": "testuser", "password": "testpass"}
+        )
         html = response.data.decode("utf-8")
         assert "Account with this username already created." in html
 
+
 def test_signup_post_missing_fields(test_client):
-    '''Test signup with missing username and password fields.'''
-    response = test_client.post("/signup", data={
-        "username": "",
-        "password": ""
-    })
+    """Test signup with missing username and password fields."""
+    response = test_client.post("/signup", data={"username": "", "password": ""})
     html = response.data.decode("utf-8")
     assert "All fields are required" in html
 
+
 def test_login_get(test_client):
-    '''Test that the login page loads successfully on GET request.'''
+    """Test that the login page loads successfully on GET request."""
     response = test_client.get("/login")
     assert response.status_code == 200
 
+
 def test_login_post_success(test_client):
-    '''Test successful login with valid credentials.'''
-    with patch.object(app_module.db, "accounts") as mock_db, \
-         patch("app.check_password_hash", return_value=True):
+    """Test successful login with valid credentials."""
+    with patch.object(app_module.db, "accounts") as mock_db, patch(
+        "app.check_password_hash", return_value=True
+    ):
         mock_user = {
             "_id": ObjectId(),
             "username": "testuser",
-            "password": "hashedpass"
+            "password": "hashedpass",
         }
         mock_db.find_one.return_value = mock_user
-        response = test_client.post("/login", data={
-            "username": "testuser",
-            "password": "testpass"
-        }, follow_redirects=True)
+        response = test_client.post(
+            "/login",
+            data={"username": "testuser", "password": "testpass"},
+            follow_redirects=True,
+        )
         assert response.status_code == 200
 
+
 def test_login_post_invalid(test_client):
-    '''Test login attempt with invalid credentials.'''
+    """Test login attempt with invalid credentials."""
     with patch.object(app_module.db, "accounts") as mock_db:
         mock_db.find_one.return_value = None
-        response = test_client.post("/login", data={
-            "username": "testuser",
-            "password": "wrongpass"
-        })
+        response = test_client.post(
+            "/login", data={"username": "testuser", "password": "wrongpass"}
+        )
         html = response.data.decode("utf-8")
         assert "Invalid username or password" in html
 
+
 def test_profile_route_authenticated(test_client):
-    '''Test access to profile page for authenticated user.'''
+    """Test access to profile page for authenticated user."""
     test_user_id = str(ObjectId())
     with test_client.session_transaction() as sess:
         sess["user_id"] = test_user_id
 
     with patch.object(app_module.db, "accounts") as mock_db:
-        mock_db.find_one.return_value = {"_id": ObjectId(test_user_id), "username": "testuser"}
+        mock_db.find_one.return_value = {
+            "_id": ObjectId(test_user_id),
+            "username": "testuser",
+        }
         response = test_client.get("/profile")
         assert b"testuser" in response.data
 
+
 def test_profile_route_not_authenticated(test_client):
-    '''Test redirect to login page when user is not authenticated.'''
+    """Test redirect to login page when user is not authenticated."""
     response = test_client.get("/profile", follow_redirects=True)
     assert b"login" in response.data.lower()
 
+
 def test_logout_route(test_client):
-    '''Test logout clears session and returns home page.'''
+    """Test logout clears session and returns home page."""
     with test_client.session_transaction() as sess:
         sess["user_id"] = str(ObjectId())
     response = test_client.get("/logout", follow_redirects=True)
