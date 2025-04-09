@@ -8,12 +8,20 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip3 install -r requirements.txt
 
+#this part is for the recordings
+RUN mkdir -p /app/recordings
+#need a volume for the recordings
+VOLUME /app/recordings
+
 # the ADD command is how you add files from your local machine into a Docker image
 # Copy the current directory contents into the container at /app
 ADD . .
 
 # expose the port that the Flask app is running on... by default 5000
 EXPOSE 3000
+
+#required for docker volume where webm files are stored
+
 
 # environment variables
 ENV MONGO_URI=mongodb://db:27017/
