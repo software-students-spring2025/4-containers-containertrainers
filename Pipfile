@@ -4,17 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pylint = "*"
-black = "*"
 speechrecognition = "*"
-pymongo = "*"
-transformers = "*"
+pyaudio = "*"
 
 [dev-packages]
-pylint = "*"
 black = "*"
 
 [requires]
-python_version = "3.10"
-
-
+python_version = "3.12"
