@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  audio-recorder:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - recordings:/app/recordings
+
+volumes:
+  recordings:

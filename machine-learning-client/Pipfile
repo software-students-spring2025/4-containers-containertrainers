@@ -6,8 +6,15 @@ name = "pypi"
 [packages]
 pylint = "*"
 black = "*"
+speechrecognition = "*"
+pymongo = "*"
+transformers = "*"
 
 [dev-packages]
+pylint = "*"
+black = "*"
 
 [requires]
 python_version = "3.10"
+
+
