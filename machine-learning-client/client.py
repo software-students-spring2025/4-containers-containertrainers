@@ -17,7 +17,7 @@ mic = sr.Microphone()
 print("Say something...")
 
 def transcribe_and_summarize():
-    #"""Transcribes audio from the given file path using SpeechRecognition."""
+    """Transcribes audio from the given file path using SpeechRecognition."""
     with mic as source:
         print("🎤 Speak now...")
         audio = recognizer.listen(source)
