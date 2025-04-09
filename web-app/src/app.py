@@ -130,9 +130,11 @@ def upload_audio():
 
     return jsonify({"success": True, "filename": filename})
 
+
 def summarized_text(sometext):
     """summarized text access funciton"""
     return summarize_text_access(sometext)
+
 
 if __name__ == "__main__":
     PORT = os.getenv("PORT")
