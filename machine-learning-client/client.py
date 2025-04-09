@@ -1,9 +1,9 @@
-from pymongo import MongoClient
+"""This module handles speech recognition and logging for transcriptions."""
+
 from datetime import datetime, timezone
+from pymongo import MongoClient
 import speech_recognition as sr
 from transformers import pipeline
-
-"""This module handles speech recognition and logging for transcriptions."""
 
 recognizer = sr.Recognizer()
 summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", device=-1)
@@ -17,7 +17,7 @@ mic = sr.Microphone()
 print("Say something...")
 
 def transcribe_and_summarize():
-    """Transcribes audio from the given file path using SpeechRecognition."""
+    #"""Transcribes audio from the given file path using SpeechRecognition."""
     with mic as source:
         print("🎤 Speak now...")
         audio = recognizer.listen(source)
@@ -42,4 +42,5 @@ def transcribe_and_summarize():
     except sr.RequestError as e:
         print(f"❌ Could not request results from Google: {e}")
 
-transcribe_and_summarize()
+if __name__ == "__main__":
+    transcribe_and_summarize()
