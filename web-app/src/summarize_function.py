@@ -1,4 +1,9 @@
-"""This contains the text summarizer function to summarize
+# pylint: disable=import-error,unused-import
+
+
+"""This contains the text summarizer function to summarize, imports are in requirements.txt already
+there
+no true import errors
 the text that is gotten from speech to text"""
 
 import nltk
