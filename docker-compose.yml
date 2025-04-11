@@ -1,12 +1,46 @@
-version: '3'
+version: "3.8"
 
 services:
-  audio-recorder:
-    build: .
+  web-app:
+    build:
+      context: ./web-app
+    container_name: web-app
     ports:
       - "3000:3000"
     volumes:
       - recordings:/app/recordings
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
+      - MONGO_DBNAME=speechdb
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  ml-client:
+    build:
+      context: ./machine-learning-client
+    container_name: ml-client
+    volumes:
+      - recordings:/app/recordings
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
+      - MONGO_DBNAME=speechdb
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - backend
 
 volumes:
   recordings:
+
+networks:
+  backend:
