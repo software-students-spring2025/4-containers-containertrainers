@@ -1,11 +1,12 @@
 # pylint: disable=import-error,redefined-outer-name
 
 
-"""Test App"""
+"""Test for App"""
 
 import importlib.util
 import sys
 import os
+from io import BytesIO
 from unittest.mock import patch
 from bson import ObjectId
 import pytest
@@ -134,3 +135,31 @@ def test_logout_route(test_client):
         sess["user_id"] = str(ObjectId())
     response = test_client.get("/logout", follow_redirects=True)
     assert response.status_code == 200
+
+def test_record_page(test_client):
+    """Test the record route loads successfully."""
+    response = test_client.get("/record")
+    assert response.status_code == 200
+    assert b"<html" in response.data
+
+def test_upload_audio_missing_file(test_client):
+    """Test upload without audio field returns failure."""
+    response = test_client.post("/upload", data={})
+    json_response = response.get_json()
+
+    assert response.status_code == 200
+    assert json_response["success"] is False
+
+def test_upload_audio_success(test_client):
+    """Test successful audio file upload."""
+    dummy_audio = (BytesIO(b"fake audio"), "test_audio.webm")
+    data = {"audio": dummy_audio}
+
+    response = test_client.post("/upload", data=data, content_type="multipart/form-data")
+    json_data = response.get_json()
+
+    assert response.status_code == 200
+    assert json_data["success"] is True
+    assert "filename" in json_data
+
+
