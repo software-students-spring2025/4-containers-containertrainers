@@ -6,10 +6,8 @@ RUN pip install pipenv
 # Set the working directory in the container
 WORKDIR /app
 
-COPY Pipfile Pipfile.lock ./
-
-
-RUN pipenv install --deploy --system
+COPY requirements.txt ./
+RUN pip3 install -r requirements.txt
 
 ADD . /app
 
