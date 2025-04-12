@@ -3,4 +3,4 @@ transformers==4.51.1
 torch==2.6.0
 Flask
 pymongo==3.12.1
-
+dnspython==2.7.0
