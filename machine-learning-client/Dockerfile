@@ -5,7 +5,8 @@ FROM python:3.12-slim
 WORKDIR /app
 
 COPY . /app
-RUN pip install --no-cache-dir -r requirements.txt
-EXPOSE 5000
+RUN pip install -r requirements.txt
+
+EXPOSE 3000
 ENV PYTHONDONTWRITEBYTECODE 1
 CMD ["python", "client.py"]
