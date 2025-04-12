@@ -43,7 +43,7 @@ rec_validator = {
         "required": ["filename", "audioData"],
         "properties": {
             "filename": {"bsonType": "string"},
-            "audioData": {"bsonType": "binData"}
+            "audioData": {"bsonType": "binData"},
         },
     }
 }
