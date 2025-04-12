@@ -10,7 +10,6 @@ services:
     volumes:
       - recordings:/app/recordings
     environment:
-      - MONGO_URI=mongodb+srv://nb3460:9paNoydyVz52hqhO@cluster0.zfwsq7e.mongodb.net/Speech2Text?retryWrites=true&w=majority&appName=Cluster0
       - MONGO_DBNAME=speech2text
     depends_on:
       - mongodb
@@ -24,7 +23,6 @@ services:
     volumes:
       - recordings:/app/recordings
     environment:
-      - MONGO_URI=mongodb+srv://nb3460:9paNoydyVz52hqhO@cluster0.zfwsq7e.mongodb.net/Speech2Text?retryWrites=true&w=majority&appName=Cluster0
       - MONGO_DBNAME=speech2text
     depends_on:
       - mongodb
