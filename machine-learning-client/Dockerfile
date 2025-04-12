@@ -2,9 +2,9 @@
 FROM python:3.12-slim
 
 # Set the working directory in the container
-WORKDIR /app-ml-client
+WORKDIR /machine-learning-client
 
-COPY requirements.txt ./
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 ADD . .
