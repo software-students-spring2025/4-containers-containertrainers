@@ -7,7 +7,7 @@ WORKDIR /app
 
 # System dependencies
 COPY requirements.txt ./
-RUN pip install -r requirements.txt
+RUN pip install -r ./web-app/requirements.txt
 
 ADD . /app
 

@@ -7,7 +7,7 @@ RUN pip install pipenv
 WORKDIR /app
 
 COPY requirements.txt ./
-RUN pip install -r requirements.txt
+RUN pip install -r ./machine-learning-client/requirements.txt
 
 ADD . /app
 
