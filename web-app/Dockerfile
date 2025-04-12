@@ -6,7 +6,7 @@ RUN pip install pipenv
 WORKDIR /app
 
 # System dependencies
-COPY requirements.txt ./
+COPY ./web-app/requirements.txt ./web-app
 RUN pip install -r ./web-app/requirements.txt
 
 ADD . /app

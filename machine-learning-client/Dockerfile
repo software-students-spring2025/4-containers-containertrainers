@@ -6,7 +6,7 @@ RUN pip install pipenv
 # Set the working directory in the container
 WORKDIR /app
 
-COPY requirements.txt ./
+COPY ./machine-learning-client/requirements.txt ./machine-learning-client
 RUN pip install -r ./machine-learning-client/requirements.txt
 
 ADD . /app
