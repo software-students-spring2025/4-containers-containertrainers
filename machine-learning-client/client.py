@@ -1,6 +1,5 @@
 """This module handles speech recognition and logging for transcriptions."""
 
-import os
 from datetime import datetime, timezone
 from pymongo import MongoClient
 import speech_recognition as sr
@@ -11,7 +10,7 @@ summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", de
 
 client = MongoClient("mongodb+srv://cluster0.zfwsq7e.mongodb.net/")
 db = client["speech2text"]
-collection = db["transcriptions"]  # to be changed
+collection = db["transcriptions"]  # Update collection name if needed
 
 
 def transcribe_and_summarize():
@@ -23,6 +22,9 @@ def transcribe_and_summarize():
             audio = recognizer.listen(source)
     except sr.WaitTimeoutError as e:
         print(f"Failed to capture audio: {e}")
+        return
+    except Exception as e:
+        print(f"Unexpected audio error: {e}")
         return
 
     try:
