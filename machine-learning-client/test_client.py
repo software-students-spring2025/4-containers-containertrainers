@@ -9,7 +9,9 @@ import client
 @patch("client.recognizer.recognize_google")
 @patch("client.summarizer")
 @patch("client.collection.insert_one")
-def test_transcribe_and_summarize_success(mock_insert, mock_summarizer, mock_recognize, mock_listen, mock_microphone):
+def test_transcribe_and_summarize_success(
+    mock_insert, mock_summarizer, mock_recognize, mock_listen, mock_microphone
+):
     mock_recognize.return_value = "This is a test sentence."
     mock_summarizer.return_value = [{"summary_text": "A test summary."}]
     mock_listen.return_value = MagicMock()
@@ -32,7 +34,9 @@ def test_transcribe_handles_unknown_value(mock_recognize, mock_listen, mock_micr
 
 @patch("client.sr.Microphone")
 @patch("client.recognizer.listen")
-@patch("client.recognizer.recognize_google", side_effect=sr.RequestError("API unavailable"))
+@patch(
+    "client.recognizer.recognize_google", side_effect=sr.RequestError("API unavailable")
+)
 def test_transcribe_handles_request_error(mock_recognize, mock_listen, mock_microphone):
     with patch("builtins.print") as mock_print:
         client.transcribe_and_summarize()
@@ -44,7 +48,9 @@ def test_transcribe_handles_request_error(mock_recognize, mock_listen, mock_micr
 @patch("client.recognizer.recognize_google", return_value="audio text")
 @patch("client.sr.Microphone")
 @patch("client.collection.insert_one")
-def test_summarizer_crash(mock_insert, mock_mic, mock_recognize, mock_listen, mock_summarizer):
+def test_summarizer_crash(
+    mock_insert, mock_mic, mock_recognize, mock_listen, mock_summarizer
+):
     mock_listen.return_value = MagicMock()
     with patch("builtins.print") as mock_print:
         client.transcribe_and_summarize()
@@ -64,7 +70,9 @@ def test_audio_input_failure(mock_mic, mock_listen):
 @patch("client.recognizer.listen")
 @patch("client.recognizer.recognize_google")
 @patch("client.collection.insert_one", side_effect=Exception("DB down"))
-def test_database_failure_handled(mock_insert, mock_recognize, mock_listen, mock_mic, mock_summarizer):
+def test_database_failure_handled(
+    mock_insert, mock_recognize, mock_listen, mock_mic, mock_summarizer
+):
     mock_recognize.return_value = "text"
     mock_summarizer.return_value = [{"summary_text": "summary of audio"}]
     mock_listen.return_value = MagicMock()

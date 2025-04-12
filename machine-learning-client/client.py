@@ -16,6 +16,7 @@ client = MongoClient(MONGO_URI)
 db = client[MONGO_DBNAME]
 collection = db["transcriptions"]
 
+
 def transcribe_and_summarize():
     """Transcribes audio and stores transcription and summary in MongoDB."""
     mic = sr.Microphone()
@@ -38,7 +39,9 @@ def transcribe_and_summarize():
         return
 
     try:
-        summary = summarizer(text, max_length=20, min_length=10, do_sample=False)[0]["summary_text"]
+        summary = summarizer(text, max_length=20, min_length=10, do_sample=False)[0][
+            "summary_text"
+        ]
         print(f"Summary: {summary}")
     except (KeyError, ValueError) as e:
         print(f"Summarization failed: {e}")
@@ -54,6 +57,7 @@ def transcribe_and_summarize():
         print("Stored in DB")
     except Exception as e:
         print(f"Failed to store in DB: {e}")
+
 
 if __name__ == "__main__":
     print("Testing MongoDB connection...")
