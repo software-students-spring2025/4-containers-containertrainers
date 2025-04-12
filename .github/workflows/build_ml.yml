@@ -1,0 +1,20 @@
+name: CI
+on: [pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.11"]
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+      - name: setup docker
+        uses: docker/setup-buildx-action@v3
+      - name: build app
+        run: docker build -t machine-learning-client .
+      - name: run app
+        run: docker run --rm machine-learning-client
+      - name: run tests
+        run: docker exec -it machine-learning-client pytest
