@@ -8,9 +8,9 @@ from transformers import pipeline
 recognizer = sr.Recognizer()
 summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", device=-1)
 
-client = MongoClient("mongodb://mongodb:27017/")  # to be changed
-db = client["speechdb"]
-collection = db["transcriptions"]
+client = MongoClient("mongodb+srv://cluster0.zfwsq7e.mongodb.net/")
+db = client["speech2text"]
+collection = db["transcriptions"] # to be changed
 
 mic = sr.Microphone()
 
@@ -22,6 +22,7 @@ def transcribe_and_summarize():
     with mic as source:
         print("🎤 Speak now...")
         audio = recognizer.listen(source)
+        # send audio to audio collection?
 
     try:
         text = recognizer.recognize_google(audio)
