@@ -3,13 +3,15 @@
 import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
+import certifi
 
 load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
 MONGO_DBNAME = str(os.getenv("MONGO_DBNAME"))
+MONGO_DSN = os.getenv("MONGO_DSN")
 
-connection = MongoClient(MONGO_URI)
+connection = MongoClient(MONGO_DSN, tlsCAFile=certifi.where())
 db = connection[MONGO_DBNAME]
 
 acc_validator = {

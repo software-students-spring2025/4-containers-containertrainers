@@ -9,12 +9,9 @@ from transformers import pipeline
 recognizer = sr.Recognizer()
 summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", device=-1)
 
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
-MONGO_DBNAME = os.getenv("MONGO_DBNAME", "speechdb")
-
-client = MongoClient(MONGO_URI)
-db = client[MONGO_DBNAME]
-collection = db["transcriptions"]
+client = MongoClient("mongodb+srv://cluster0.zfwsq7e.mongodb.net/")
+db = client["speech2text"]
+collection = db["transcriptions"]  # to be changed
 
 
 def transcribe_and_summarize():
