@@ -8,15 +8,15 @@ jobs:
       matrix:
         python-version: ["3.9", "3.11"]
     defaults:
-      run:
-        working-directory: ./web-app
+      # run:
+      #   working-directory: ./web-app
     steps:
       - name: checkout repo
         uses: actions/checkout@v4
-      - name: setup docker
-        uses: docker/setup-buildx-action@v3
+      # - name: setup docker
+      #   uses: docker/setup-buildx-action@v3
       - name: build app
-        run: docker build -t web-app .
+        run: docker build -t web-app ./web-app
       - name: run app
         run: docker run --rm web-app
       - name: run tests

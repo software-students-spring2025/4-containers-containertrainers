@@ -1,15 +1,13 @@
 # web-app/Dockerfile
 FROM python:3.9-slim-buster
 
-RUN pip install pipenv
-
-WORKDIR /app
+WORKDIR /web-app
 
 # System dependencies
-COPY ./web-app/requirements.txt ./web-app
-RUN pip install -r ./web-app/requirements.txt
+COPY requirements.txt ./
+RUN pip3 install -r requirements.txt
 
-ADD . /app
+ADD . .
 
 RUN mkdir -p /app/recordings
 VOLUME ["/app/recordings"]

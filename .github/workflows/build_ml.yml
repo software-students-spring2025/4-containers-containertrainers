@@ -8,15 +8,15 @@ jobs:
       matrix:
         python-version: ["3.9", "3.11"]
     defaults:
-      run:
-        working-directory: ./machine-learning-client
+      # run:
+      #   working-directory: ./machine-learning-client
     steps:
       - name: checkout repo
         uses: actions/checkout@v4
-      - name: setup docker
-        uses: docker/setup-buildx-action@v3
+      # - name: setup docker
+      #   uses: docker/setup-buildx-action@v3
       - name: build app
-        run: docker build -t machine-learning-client .
+        run: docker build -t machine-learning-client ./machine-learning-client
       - name: run app
         run: docker run --rm machine-learning-client
       - name: run tests
