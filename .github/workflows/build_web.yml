@@ -7,9 +7,9 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.9", "3.11"]
-    defaults:
-      # run:
-      #   working-directory: ./web-app
+    # defaults:
+    # run:
+    #   working-directory: ./web-app
     steps:
       - name: checkout repo
         uses: actions/checkout@v4
