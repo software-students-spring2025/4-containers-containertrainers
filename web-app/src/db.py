@@ -36,8 +36,21 @@ mess_validator = {
     }
 }
 
+rec_validator = {
+    "$jsonSchema": {
+        "bsonType": "object",
+        "required": ["filename", "audioData"],
+        "properties": {
+            "filename": {"bsonType": "string"},
+            "audioData": {"bsonType": "binData"},
+        },
+    }
+}
+
+
 accounts = db.accounts
 messages = db.messages
+recordings = db.recordings
 
 # db.command('collMod', 'accounts', validator=acc_validator)
 # db.command('collMod', 'messages', validator=mess_validator)
