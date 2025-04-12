@@ -1,5 +1,6 @@
 """This module handles speech recognition and logging for transcriptions."""
 
+import os
 from datetime import datetime, timezone
 from pymongo import MongoClient
 import speech_recognition as sr
@@ -8,43 +9,58 @@ from transformers import pipeline
 recognizer = sr.Recognizer()
 summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", device=-1)
 
-client = MongoClient("mongodb://mongodb:27017/")  # to be changed
-db = client["speechdb"]
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
+MONGO_DBNAME = os.getenv("MONGO_DBNAME", "speechdb")
+
+client = MongoClient(MONGO_URI)
+db = client[MONGO_DBNAME]
 collection = db["transcriptions"]
 
-mic = sr.Microphone()
 
-print("Say something...")
 
 
 def transcribe_and_summarize():
-    """Transcribes audio from the given file path using SpeechRecognition."""
-    with mic as source:
-        print("🎤 Speak now...")
-        audio = recognizer.listen(source)
+    """Transcribes audio and stores transcription and summary in MongoDB."""
+    mic = sr.Microphone()
+    try:
+        with mic as source:
+            print("Speak now...")
+            audio = recognizer.listen(source)
+    except Exception as e:
+        print(f"Failed to capture audio: {e}")
+        return
 
     try:
         text = recognizer.recognize_google(audio)
-        print(f"[Transcribed] {text}")
+        print(f"Transcribed: {text}")
+    except sr.UnknownValueError:
+        print("Speech Recognition could not understand the audio.")
+        return
+    except sr.RequestError as e:
+        print(f"Google API error: {e}")
+        return
 
-        summary = summarizer(text, max_length=20, min_length=10, do_sample=False)[0][
-            "summary_text"
-        ]
-        print(f"[Summary] {summary}")
+    try:
+        summary = summarizer(text, max_length=20, min_length=10, do_sample=False)[0]["summary_text"]
+        print(f"Summary: {summary}")
+    except Exception as e:
+        print(f"Summarization failed: {e}")
+        return
 
+    try:
         doc = {
             "timestamp": datetime.now(timezone.utc),
             "transcript": text,
             "summary": summary,
         }
         collection.insert_one(doc)
-        print("✅ Stored in DB")
-
-    except sr.UnknownValueError:
-        print("😕 Could not understand audio")
-    except sr.RequestError as e:
-        print(f"❌ Could not request results from Google: {e}")
+        print("Stored in DB")
+    except Exception as e:
+        print("Failed to store in DB")
 
 
 if __name__ == "__main__":
+    print("Testing MongoDB connection...")
+    print("Databases:", client.list_database_names())
+    print("Collections:", db.list_collection_names())
     transcribe_and_summarize()
