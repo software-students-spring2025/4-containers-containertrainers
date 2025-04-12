@@ -83,7 +83,7 @@ def logout():
 
 # audio recording part
 RECORDINGS_FOLDER = "/app/recordings"
-os.makedirs(RECORDINGS_FOLDER, exist_ok=True)
+# os.makedirs(RECORDINGS_FOLDER, exist_ok=True)
 
 
 # look for the next file, file numbers are sequential
