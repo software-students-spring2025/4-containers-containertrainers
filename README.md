@@ -44,7 +44,7 @@ git clone https://github.com/software-students-spring2025/4-containers-container
 1. Build and Run
 
 ```shell
-docker-compose-up --build
+docker compose-up --build
 ```
 
 2. Run Tests
