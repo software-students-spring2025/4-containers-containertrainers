@@ -10,7 +10,7 @@ summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", de
 
 client = MongoClient("mongodb+srv://cluster0.zfwsq7e.mongodb.net/")
 db = client["speech2text"]
-collection = db["transcriptions"] # to be changed
+collection = db["transcriptions"]  # to be changed
 
 mic = sr.Microphone()
 
