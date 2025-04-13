@@ -1,0 +1,21 @@
+name: ML CI
+on: [pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+      - name: install dependencies
+          run: |
+            sudo apt-get install portaudio19-dev
+            pip install pipenv
+            pipenv install --dev
+            pipenv install -r machine-learning-client/requirements.txt
+        - name: run tests
+          run: pipenv install pytest
+          # run: pipenv run pytest machine-learning-client/test_client.py

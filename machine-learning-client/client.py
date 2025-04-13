@@ -2,12 +2,14 @@
 transcribes them, summarizes them, and writes results into 'messages'.
 """
 
+# pylint: disable=import-error
+
 from datetime import datetime, timezone
 import io
 from pymongo import MongoClient
 import speech_recognition as sr
 from transformers import pipeline
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
@@ -43,27 +45,47 @@ def process_audio():
         summary = summarizer(text, max_length=20, min_length=10, do_sample=False)[0][
             "summary_text"
         ]
-        print(f"[Summary] {summary}")
+        print(f"Summary: {summary}")
 
-        result_doc = {
-            "timestamp": datetime.now(timezone.utc),
-            "transcript": text,
-            "summary": summary,
-            "source_audio_id": audio_doc["_id"],
-        }
-
-        messages_collection.insert_one(result_doc)
-        audio_collection.update_one(
-            {"_id": audio_doc["_id"]}, {"$set": {"processed": True}}
-        )
-        print("Latest audio processed and stored.")
-
+    except (KeyError, ValueError) as e:
+        print(f"Summarization failed: {e}")  # pylint: disable=broad-exception-caught
+        return
     except sr.UnknownValueError:
         print("Could not understand audio")
+        return
     except sr.RequestError as e:
-        print(f"Google Speech API error: {e}")
-    except Exception:  # pylint: disable=broad-exception-caught
+        print(f"Google Speech API error: {e}")  # pylint: disable=broad-exception-caught
+        return
+    except Exception as e:  # pylint: disable=broad-exception-caught
         print(f"Unexpected error: {e}")
+        return
+
+    result_doc = {
+        "timestamp": datetime.now(timezone.utc),
+        "transcript": text,
+        "summary": summary,
+        "source_audio_id": audio_doc["_id"],
+    }
+
+    messages_collection.insert_one(result_doc)
+    audio_collection.update_one(
+        {"_id": audio_doc["_id"]}, {"$set": {"processed": True}}
+    )
+    print("Latest audio processed and stored.")
+
+
+@app.route("/process_audio", methods=["POST"])
+def api_to_process_audio():
+    """this should signal ml-client to process the audio put in the mongodb"""
+    process_audio()
+    return jsonify({"status": "success", "message": "Audio processed"})
+
+
+@app.route("/process_audio", methods=["POST"])
+def api_to_process_audio():
+    """this should signal ml-client to process the audio put in the mongodb"""
+    process_audio()
+    return jsonify({"status": "success", "message": "Audio processed"})
 
 @app.route('/process_audio', methods=['POST'])
 def api_to_process_audio():
@@ -72,4 +94,4 @@ def api_to_process_audio():
     return jsonify({"status": "success", "message": "Ausio processed"})
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host="0.0.0.0", port=5001)
