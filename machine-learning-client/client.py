@@ -58,7 +58,7 @@ def process_audio():
         print("Could not understand audio")
     except sr.RequestError as e:
         print(f"Google Speech API error: {e}")
-    except Exception as e:
+    except Exception:  # pylint: disable=broad-exception-caught
         print(f"Unexpected error: {e}")
 
 
