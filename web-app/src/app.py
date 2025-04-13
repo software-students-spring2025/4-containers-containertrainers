@@ -4,7 +4,6 @@ import os
 import sys
 import time
 
-import requests
 
 # import glob
 
@@ -173,7 +172,7 @@ def get_result():
             retry_count += 1
             time.sleep(2)
 
-        except requests.exceptions.RequestException:
+        except request.exceptions.RequestException:
             retry_count += 1
             time.sleep(2)
 
