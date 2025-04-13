@@ -2,8 +2,10 @@
 
 import os
 import sys
-import requests
 import time
+
+import requests
+
 # import glob
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
@@ -165,7 +167,7 @@ def get_result():
     while retry_count < max_retries:
         time.sleep(10)
         try:
-            response = request.post('http://ml-client:5001/process_audio')
+            response = request.post("http://ml-client:5001/process_audio")
             if not response.ok:
                 break
             retry_count += 1
@@ -174,7 +176,6 @@ def get_result():
         except requests.exceptions.RequestException:
             retry_count += 1
             time.sleep(2)
-
 
     # retrieve result not changed
 

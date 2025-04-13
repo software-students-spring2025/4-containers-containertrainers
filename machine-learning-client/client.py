@@ -65,11 +65,13 @@ def process_audio():
     except Exception:  # pylint: disable=broad-exception-caught
         print(f"Unexpected error: {e}")
 
-@app.route('/process_audio', methods=['POST'])
+
+@app.route("/process_audio", methods=["POST"])
 def api_to_process_audio():
     """this should signal ml-client to process the audio put in the mongodb"""
     process_audio()
     return jsonify({"status": "success", "message": "Audio processed"})
 
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host="0.0.0.0", port=5001)
