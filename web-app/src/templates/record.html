@@ -12,6 +12,9 @@
     <button id="recordBtn">Record</button>
     <button id="stopBtn" disabled>Stop</button>
     <div id="status">Recording...</div>
+    <button id="getResults">Get Results</button>
+    <div id="transcriptText"></div>
+    <div id="summaryText"></div>
 
     <!-- recording from get user media example?  use getusermedia-->
     <script>
@@ -19,6 +22,8 @@
         const recordBtn = document.getElementById('recordBtn');
         const stopBtn = document.getElementById('stopBtn');
         const status = document.getElementById('status');
+        const resBtn = document.getElementById('getResults');
+        const result = document.getElementById('result');
 
         // Variables
         let recorder;
@@ -71,6 +76,18 @@
                 body: formData
             });
         }
+
+        resBtn.onclick = function () {
+            fetch("/result")
+                .then((response) => response.json())
+                .then((data) => {
+                document.getElementById("transcriptText").textContent = data.Transcript;
+                document.getElementById("summaryText").textContent = data.Summary;
+                })
+                .catch((error) => {
+                console.error("Error fetching result:", error);
+                });
+        };
     </script>
 </body>
 </html>

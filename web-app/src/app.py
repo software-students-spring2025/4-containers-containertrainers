@@ -19,6 +19,8 @@ sys.path.append(
 # pylint: disable=import-error, wrong-import-position
 from client import process_audio
 
+from pymongo import MongoClient
+
 import db
 
 from summarize_function import summarize_text_access
@@ -148,10 +150,25 @@ def upload_audio():
     # now not about file it is about db
     db.recordings.insert_one({"filename": filename, "audioData": audio_data})
 
-    process_audio()
-
     # audop data is a binary
     return jsonify({"success": True, "filename": filename})
+
+
+@app.route("/result")
+def get_result():
+    """get resulting transcript and summary and return to front end"""
+    process_audio()
+
+    client = MongoClient("mongodb://mongodb:27017")
+    speech_db = client["speech2text"]
+    messages_collection = speech_db["messages"]
+
+    latest_doc = messages_collection.find_one(sort=[("_id", -1)])
+
+    transcript = latest_doc.get("transcript", "") if latest_doc else ""
+    summary = latest_doc.get("summary", "") if latest_doc else ""
+
+    return jsonify({"Transcript": transcript, "Summary": summary})
 
 
 def summarized_text(sometext):
