@@ -13,7 +13,7 @@ summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", de
 
 client = MongoClient("mongodb://mongodb:27017")
 db = client["speech2text"]
-audio_collection = db["audio"]
+audio_collection = db["recordings"]
 messages_collection = db["messages"]
 
 def process_audio():
