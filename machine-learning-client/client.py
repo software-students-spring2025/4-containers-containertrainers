@@ -2,11 +2,17 @@
 transcribes them, summarizes them, and writes results into 'messages'.
 """
 
+# pylint: disable=import-error
+
 from datetime import datetime, timezone
 import io
 from pymongo import MongoClient
 import speech_recognition as sr
 from transformers import pipeline
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
 
 recognizer = sr.Recognizer()
 summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", device=-1)
@@ -27,7 +33,7 @@ def process_audio():
         print("No new audio recordings found.")
         return
 
-    audio_blob = audio_doc["data"]
+    audio_blob = audio_doc.get("audioData")
 
     try:
         with sr.AudioFile(io.BytesIO(audio_blob)) as source:
@@ -62,5 +68,12 @@ def process_audio():
         print(f"Unexpected error: {e}")
 
 
-if __name__ == "__main__":
+@app.route("/process_audio", methods=["POST"])
+def api_to_process_audio():
+    """this should signal ml-client to process the audio put in the mongodb"""
     process_audio()
+    return jsonify({"status": "success", "message": "Audio processed"})
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5001)
