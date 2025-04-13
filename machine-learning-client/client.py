@@ -16,11 +16,11 @@ db = client["speech2text"]
 audio_collection = db["recordings"]
 messages_collection = db["messages"]
 
+
 def process_audio():
     """Processes the latest unprocessed audio blob."""
     audio_doc = audio_collection.find_one(
-        {"processed": {"$ne": True}}, 
-        sort=[("timestamp", -1)]
+        {"processed": {"$ne": True}}, sort=[("timestamp", -1)]
     )
 
     if not audio_doc:
@@ -36,7 +36,9 @@ def process_audio():
         text = recognizer.recognize_google(audio_data)
         print(f"[Transcribed] {text}")
 
-        summary = summarizer(text, max_length=20, min_length=10, do_sample=False)[0]["summary_text"]
+        summary = summarizer(text, max_length=20, min_length=10, do_sample=False)[0][
+            "summary_text"
+        ]
         print(f"[Summary] {summary}")
 
         result_doc = {
@@ -47,7 +49,9 @@ def process_audio():
         }
 
         messages_collection.insert_one(result_doc)
-        audio_collection.update_one({"_id": audio_doc["_id"]}, {"$set": {"processed": True}})
+        audio_collection.update_one(
+            {"_id": audio_doc["_id"]}, {"$set": {"processed": True}}
+        )
         print("Latest audio processed and stored.")
 
     except sr.UnknownValueError:
@@ -56,6 +60,7 @@ def process_audio():
         print(f"Google Speech API error: {e}")
     except Exception as e:
         print(f"Unexpected error: {e}")
+
 
 if __name__ == "__main__":
     process_audio()

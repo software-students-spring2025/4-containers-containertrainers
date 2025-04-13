@@ -12,7 +12,11 @@ import db
 
 from summarize_function import summarize_text_access
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../machine_learning_client')))
+sys.path.append(
+    os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "../../machine_learning_client")
+    )
+)
 from client import process_audio
 
 app = Flask(__name__)
