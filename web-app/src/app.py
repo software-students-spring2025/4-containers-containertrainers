@@ -19,11 +19,11 @@ sys.path.append(
 # pylint: disable=import-error, wrong-import-position
 from client import process_audio
 
+from pymongo import MongoClient
+
 import db
 
 from summarize_function import summarize_text_access
-
-from pymongo import MongoClient
 
 
 app = Flask(__name__)
