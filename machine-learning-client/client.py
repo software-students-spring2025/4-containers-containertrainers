@@ -45,27 +45,33 @@ def process_audio():
         summary = summarizer(text, max_length=20, min_length=10, do_sample=False)[0][
             "summary_text"
         ]
-        print(f"[Summary] {summary}")
+        print(f"Summary: {summary}")
 
-        result_doc = {
-            "timestamp": datetime.now(timezone.utc),
-            "transcript": text,
-            "summary": summary,
-            "source_audio_id": audio_doc["_id"],
-        }
-
-        messages_collection.insert_one(result_doc)
-        audio_collection.update_one(
-            {"_id": audio_doc["_id"]}, {"$set": {"processed": True}}
-        )
-        print("Latest audio processed and stored.")
-
+    except (KeyError, ValueError) as e:
+        print(f"Summarization failed: {e}")  # pylint: disable=broad-exception-caught
+        return
     except sr.UnknownValueError:
         print("Could not understand audio")
+        return
     except sr.RequestError as e:
-        print(f"Google Speech API error: {e}")
-    except Exception:  # pylint: disable=broad-exception-caught
+        print(f"Google Speech API error: {e}")  # pylint: disable=broad-exception-caught
+        return
+    except Exception as e:  # pylint: disable=broad-exception-caught
         print(f"Unexpected error: {e}")
+        return
+
+    result_doc = {
+        "timestamp": datetime.now(timezone.utc),
+        "transcript": text,
+        "summary": summary,
+        "source_audio_id": audio_doc["_id"],
+    }
+
+    messages_collection.insert_one(result_doc)
+    audio_collection.update_one(
+        {"_id": audio_doc["_id"]}, {"$set": {"processed": True}}
+    )
+    print("Latest audio processed and stored.")
 
 
 @app.route("/process_audio", methods=["POST"])
