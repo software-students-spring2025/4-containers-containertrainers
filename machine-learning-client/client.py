@@ -3,10 +3,10 @@ transcribes them, summarizes them, and writes results into 'messages'.
 """
 
 from datetime import datetime, timezone
+import io
 from pymongo import MongoClient
 import speech_recognition as sr
 from transformers import pipeline
-import io
 
 recognizer = sr.Recognizer()
 summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", device=-1)
