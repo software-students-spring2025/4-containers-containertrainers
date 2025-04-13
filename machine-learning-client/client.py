@@ -87,11 +87,13 @@ def api_to_process_audio():
     process_audio()
     return jsonify({"status": "success", "message": "Audio processed"})
 
-@app.route('/process_audio', methods=['POST'])
+
+@app.route("/process_audio", methods=["POST"])
 def api_to_process_audio():
     """this should signal ml-client to process the audio put in the mongodb"""
     process_audio()
     return jsonify({"status": "success", "message": "Ausio processed"})
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001)
