@@ -1,7 +1,6 @@
 """App"""
 
 import os
-import glob
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 
@@ -82,22 +81,25 @@ def logout():
 
 
 # audio recording part
-RECORDINGS_FOLDER = "/app/recordings"
+# RECORDINGS_FOLDER = "/app/recordings"
 # os.makedirs(RECORDINGS_FOLDER, exist_ok=True)
 
 
 # look for the next file, file numbers are sequential
 def get_next_file_number():
-    """this gets the next file number"""
-    existing_files = glob.glob(os.path.join(RECORDINGS_FOLDER, "recording_*webm"))
-    # if no recordings
-    if not existing_files:
+    """this gets the next file number, the recording number should always be one greater"""
+    # Find all recordings in the database
+    recordings = list(db.recordings.find({}))
+
+    # If no recordings
+    if not recordings:
         return 1
+
     numbers = []
-    for filename in existing_files:
+    for recording in recordings:
         try:
-            base = os.path.basename(filename)
-            num_str = base.split("_")[1].split(".")[0]
+            filename = recording["filename"]
+            num_str = filename.split("_")[1].split(".")[0]
             numbers.append(int(num_str))
         except (IndexError, ValueError):
             continue
@@ -105,17 +107,17 @@ def get_next_file_number():
     return max(numbers) + 1 if numbers else 1
 
 
-# main page
+# main page for recording
 @app.route("/record")
 def index():
     """flask render the main page"""
     return render_template("record.html")
 
 
-# uploads to the volume
+# uploads to the mongodb in the database speech2text in recordings as a blob binary
 @app.route("/upload", methods=["POST"])
 def upload_audio():
-    """see if the file is in the resquest get the file into the volume"""
+    """see if the file is in the request and store it in the database speech2text, in recordings as a blob"""
     if "audio" not in request.files:
         return jsonify({"success": False})
 
@@ -125,9 +127,14 @@ def upload_audio():
 
     filename = f"recording_{next_number}.webm"
 
-    filepath = os.path.join(RECORDINGS_FOLDER, filename)
-    audio_file.save(filepath)
+    # Reads the binary data from the file which is recorded in webm format
+    audio_data = audio_file.read()
 
+    """ Create a new record in the recordings collection
+    now not about file it is about db """
+    db.recordings.insert_one({"filename": filename, "audioData": audio_data})
+
+    # audop data is a binary
     return jsonify({"success": True, "filename": filename})
 
 

@@ -7,8 +7,6 @@ services:
     container_name: web-app
     ports:
       - "3000:3000"
-    volumes:
-      - recordings:/app/recordings
     environment:
       - MONGO_URI=mongodb+srv://nb3460:9paNoydyVz52hqhO@cluster0.zfwsq7e.mongodb.net/Speech2Text?retryWrites=true&w=majority&appName=Cluster0
       - MONGO_DBNAME=speech2text
@@ -21,8 +19,6 @@ services:
     build:
       context: ./machine-learning-client
     container_name: ml-client
-    volumes:
-      - recordings:/app/recordings
     environment:
       - MONGO_URI=mongodb+srv://nb3460:9paNoydyVz52hqhO@cluster0.zfwsq7e.mongodb.net/Speech2Text?retryWrites=true&w=majority&appName=Cluster0
       - MONGO_DBNAME=speech2text
