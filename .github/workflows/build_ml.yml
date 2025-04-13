@@ -22,6 +22,7 @@ jobs:
 
       - name: install dependencies
         run: |
+          pip install pipenv
           pipenv install --dev
           pipenv install -r machine-learning-client/requirements.txt
 
