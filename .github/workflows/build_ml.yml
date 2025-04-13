@@ -12,16 +12,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
 
-      # - name: Install Python, pipenv and Pipfile packages
-      #   uses: kojoru/prepare-pipenv@v1
-      #   with:
-      #     python-version: ${{ matrix.python-version }}
-
-      # - name: install pyaudio dependency
-      #   run: apt-get update && apt-get install -y libportaudio2 libportaudiocpp0 portaudio19-dev python3-dev build-essential && rm -rf /var/lib/apt/lists/*
-
       - name: install dependencies
         run: |
+          sudo apt-get install portaudio19-dev
           pip install pipenv
           pipenv install --dev
           pipenv install -r machine-learning-client/requirements.txt
