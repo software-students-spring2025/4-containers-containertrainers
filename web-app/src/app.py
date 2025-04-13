@@ -117,7 +117,8 @@ def index():
 # uploads to the mongodb in the database speech2text in recordings as a blob binary
 @app.route("/upload", methods=["POST"])
 def upload_audio():
-    """see if the file is in the request and store it in the database speech2text, in recordings as a blob"""
+    """see if the file is in the request and store it in the database speech2text,
+    in recordings as a blob"""
     if "audio" not in request.files:
         return jsonify({"success": False})
 
@@ -130,8 +131,8 @@ def upload_audio():
     # Reads the binary data from the file which is recorded in webm format
     audio_data = audio_file.read()
 
-    """ Create a new record in the recordings collection
-    now not about file it is about db """
+    # Create a new record in the recordings collection
+    # now not about file it is about db
     db.recordings.insert_one({"filename": filename, "audioData": audio_data})
 
     # audop data is a binary
