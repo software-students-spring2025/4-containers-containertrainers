@@ -11,10 +11,11 @@ services:
       - MONGO_DBNAME=speech2text
     depends_on:
       - mongodb
+      - client
     networks:
       - backend
 
-  ml-client:
+  client:
     build:
       context: ./machine-learning-client
     container_name: ml-client
@@ -22,6 +23,8 @@ services:
       - MONGO_DBNAME=speech2text
     depends_on:
       - mongodb
+    ports:
+      - "5001:5001"
     networks:
       - backend
 

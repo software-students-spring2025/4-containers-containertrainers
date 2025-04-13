@@ -1,6 +1,5 @@
 speechrecognition==3.14.2
 transformers==4.51.1
 torch==2.6.0
-Flask
+flask==3.1.0
 pymongo==3.12.1
-

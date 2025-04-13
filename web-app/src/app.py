@@ -2,7 +2,8 @@
 
 import os
 import sys
-
+import requests
+import time
 # import glob
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
@@ -12,12 +13,12 @@ from bson.objectid import ObjectId
 
 sys.path.append(
     os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "../../machine_learning_client")
+        os.path.join(os.path.dirname(__file__), "../../machine-learning-client")
     )
 )
 
 # pylint: disable=import-error, wrong-import-position
-from client import process_audio
+# from client import process_audio
 
 from pymongo import MongoClient
 
@@ -157,7 +158,25 @@ def upload_audio():
 @app.route("/result")
 def get_result():
     """get resulting transcript and summary and return to front end"""
-    process_audio()
+
+    max_retries = 3
+    retry_count = 0
+
+    while retry_count < max_retries:
+        time.sleep(10)
+        try:
+            response = request.post('http://ml-client:5001/process_audio')
+            if not response.ok:
+                break
+            retry_count += 1
+            time.sleep(2)
+
+        except requests.exceptions.RequestException:
+            retry_count += 1
+            time.sleep(2)
+
+
+    # retrieve result not changed
 
     client = MongoClient("mongodb://mongodb:27017")
     speech_db = client["speech2text"]
