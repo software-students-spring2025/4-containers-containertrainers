@@ -1,24 +1,27 @@
 """App"""
 
+import os
+import sys
 import glob
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson.objectid import ObjectId
-import db
-
-from summarize_function import summarize_text_access
-
-import sys, os
 
 sys.path.append(
     os.path.abspath(
         os.path.join(os.path.dirname(__file__), "../../machine_learning_client")
     )
 )
+
 # pylint: disable=import-error, wrong-import-position
 from client import process_audio
+
+import db
+
+from summarize_function import summarize_text_access
+
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)
