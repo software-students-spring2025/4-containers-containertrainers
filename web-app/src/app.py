@@ -1,8 +1,6 @@
 """App"""
 
-import os
 import glob
-import sys
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 
@@ -12,11 +10,13 @@ import db
 
 from summarize_function import summarize_text_access
 
+import sys, os
 sys.path.append(
     os.path.abspath(
         os.path.join(os.path.dirname(__file__), "../../machine_learning_client")
     )
 )
+# pylint: disable=import-error, wrong-import-position
 from client import process_audio
 
 app = Flask(__name__)
