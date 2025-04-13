@@ -9,13 +9,14 @@ import speech_recognition as sr
 from transformers import pipeline
 
 recognizer = sr.Recognizer()
-summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", device=-1)
+summarizer = pipeline(
+    "summarization", model="sshleifer/distilbart-cnn-12-6", device=-1
+)
 
 client = MongoClient("mongodb://mongodb:27017")
 db = client["speech2text"]
 audio_collection = db["recordings"]
 messages_collection = db["messages"]
-
 
 def process_audio():
     """Processes the latest unprocessed audio blob."""
@@ -36,61 +37,36 @@ def process_audio():
         text = recognizer.recognize_google(audio_data)
         print(f"[Transcribed] {text}")
 
-collection = db["transcriptions"]  # Update collection name if needed
-
-
-def transcribe_and_summarize():
-    """Transcribes audio and stores transcription and summary in MongoDB."""
-    mic = sr.Microphone()
-    try:
-        with mic as source:
-            print("Speak now...")
-            audio = recognizer.listen(source)
-    except sr.WaitTimeoutError as e:
-        print(f"Failed to capture audio: {e}")
-        return
-    except Exception as e:
-        print(f"Unexpected audio error: {e}")
-        return
-
-    try:
-        text = recognizer.recognize_google(audio)
-        print(f"Transcribed: {text}")
-    except sr.UnknownValueError:
-        print("Speech Recognition could not understand the audio.")
-        return
-    except sr.RequestError as e:
-        print(f"Google API error: {e}")
-        return
-
-    try:
-        summary = summarizer(text, max_length=20, min_length=10, do_sample=False)[0][
-            "summary_text"
-        ]
+        summary = summarizer(
+            text, max_length=20, min_length=10, do_sample=False
+        )[0]["summary_text"]
         print(f"Summary: {summary}")
+
     except (KeyError, ValueError) as e:
         print(f"Summarization failed: {e}")
         return
-
-        result_doc = {
-            "timestamp": datetime.now(timezone.utc),
-            "transcript": text,
-            "summary": summary,
-            "source_audio_id": audio_doc["_id"],
-        }
-
-        messages_collection.insert_one(result_doc)
-        audio_collection.update_one(
-            {"_id": audio_doc["_id"]}, {"$set": {"processed": True}}
-        )
-        print("Latest audio processed and stored.")
-
     except sr.UnknownValueError:
         print("Could not understand audio")
+        return
     except sr.RequestError as e:
         print(f"Google Speech API error: {e}")
-    except Exception:  # pylint: disable=broad-exception-caught
+        return
+    except Exception as e:
         print(f"Unexpected error: {e}")
+        return
+
+    result_doc = {
+        "timestamp": datetime.now(timezone.utc),
+        "transcript": text,
+        "summary": summary,
+        "source_audio_id": audio_doc["_id"],
+    }
+
+    messages_collection.insert_one(result_doc)
+    audio_collection.update_one(
+        {"_id": audio_doc["_id"]}, {"$set": {"processed": True}}
+    )
+    print("Latest audio processed and stored.")
 
 
 if __name__ == "__main__":
