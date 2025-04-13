@@ -14,9 +14,6 @@ RUN pip install --no-cache-dir pytest pytest-cov
 
 COPY . .
 
-RUN mkdir -p /app/recordings
-VOLUME ["/app/recordings"]
-
 EXPOSE 3000
 
 CMD ["python3", "src/app.py"]
