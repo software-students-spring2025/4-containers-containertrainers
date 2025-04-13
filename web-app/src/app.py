@@ -2,6 +2,7 @@
 
 import os
 import glob
+import sys
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 
@@ -11,6 +12,8 @@ import db
 
 from summarize_function import summarize_text_access
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../machine_learning_client')))
+from client import process_audio
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)
@@ -127,6 +130,8 @@ def upload_audio():
 
     filepath = os.path.join(RECORDINGS_FOLDER, filename)
     audio_file.save(filepath)
+
+    process_audio()
 
     return jsonify({"success": True, "filename": filename})
 
