@@ -1,11 +1,24 @@
 """App"""
 
 import os
+import sys
+
+# import glob
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson.objectid import ObjectId
+
+sys.path.append(
+    os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "../../machine_learning_client")
+    )
+)
+
+# pylint: disable=import-error, wrong-import-position
+from client import process_audio
+
 import db
 
 from summarize_function import summarize_text_access
@@ -134,6 +147,8 @@ def upload_audio():
     # Create a new record in the recordings collection
     # now not about file it is about db
     db.recordings.insert_one({"filename": filename, "audioData": audio_data})
+
+    process_audio()
 
     # audop data is a binary
     return jsonify({"success": True, "filename": filename})
