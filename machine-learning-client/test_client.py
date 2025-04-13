@@ -11,23 +11,26 @@ import client
 @patch("client.recognizer.recognize_google", return_value="test audio")
 @patch("client.recognizer.record")
 @patch("client.sr.AudioFile")
-def test_process_audio_success(
-    *_
-):
+def test_process_audio_success(*_):
     """Test the full successful audio processing flow."""
     mock_find = MagicMock(return_value={"_id": "abc123", "data": b"fakeblob"})
     mock_audiofile = MagicMock()
     mock_audiofile.return_value.__enter__.return_value = MagicMock()
     mock_summarizer = MagicMock(return_value=[{"summary_text": "short summary"}])
 
-    with patch("client.audio_collection.find_one", mock_find), \
-        patch("client.sr.AudioFile", mock_audiofile), \
-        patch("client.recognizer.record"), \
-        patch("client.recognizer.recognize_google"), \
-        patch("client.summarizer", mock_summarizer), \
-        patch("client.messages_collection.insert_one"), \
-        patch("client.audio_collection.update_one"), \
-        patch("builtins.print") as mock_print:
+    with patch("client.audio_collection.find_one", mock_find), patch(
+        "client.sr.AudioFile", mock_audiofile
+    ), patch("client.recognizer.record"), patch(
+        "client.recognizer.recognize_google"
+    ), patch(
+        "client.summarizer", mock_summarizer
+    ), patch(
+        "client.messages_collection.insert_one"
+    ), patch(
+        "client.audio_collection.update_one"
+    ), patch(
+        "builtins.print"
+    ) as mock_print:
 
         client.process_audio()
         mock_print.assert_any_call("Summary: short summary")
@@ -42,7 +45,9 @@ def test_no_audio_found(_):
         mock_print.assert_any_call("No new audio recordings found.")
 
 
-@patch("client.audio_collection.find_one", return_value={"_id": "x", "data": b"invalid"})
+@patch(
+    "client.audio_collection.find_one", return_value={"_id": "x", "data": b"invalid"}
+)
 @patch("client.sr.AudioFile", side_effect=Exception("corrupted audio"))
 def test_audiofile_crash(*_):
     """Test when loading audio fails."""

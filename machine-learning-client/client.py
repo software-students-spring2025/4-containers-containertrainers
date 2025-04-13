@@ -9,14 +9,13 @@ import speech_recognition as sr
 from transformers import pipeline
 
 recognizer = sr.Recognizer()
-summarizer = pipeline(
-    "summarization", model="sshleifer/distilbart-cnn-12-6", device=-1
-)
+summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", device=-1)
 
 client = MongoClient("mongodb://mongodb:27017")
 db = client["speech2text"]
 audio_collection = db["recordings"]
 messages_collection = db["messages"]
+
 
 def process_audio():
     """Processes the latest unprocessed audio blob."""
@@ -37,21 +36,21 @@ def process_audio():
         text = recognizer.recognize_google(audio_data)
         print(f"[Transcribed] {text}")
 
-        summary = summarizer(
-            text, max_length=20, min_length=10, do_sample=False
-        )[0]["summary_text"]
+        summary = summarizer(text, max_length=20, min_length=10, do_sample=False)[0][
+            "summary_text"
+        ]
         print(f"Summary: {summary}")
 
     except (KeyError, ValueError) as e:
-        print(f"Summarization failed: {e}") # pylint: disable=broad-exception-caught
+        print(f"Summarization failed: {e}")  # pylint: disable=broad-exception-caught
         return
     except sr.UnknownValueError:
         print("Could not understand audio")
         return
     except sr.RequestError as e:
-        print(f"Google Speech API error: {e}") # pylint: disable=broad-exception-caught
+        print(f"Google Speech API error: {e}")  # pylint: disable=broad-exception-caught
         return
-    except Exception as e: # pylint: disable=broad-exception-caught
+    except Exception as e:  # pylint: disable=broad-exception-caught
         print(f"Unexpected error: {e}")
         return
 
