@@ -3,15 +3,15 @@
 import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
-import certifi
+
+# import certifi
 
 load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
 MONGO_DBNAME = str(os.getenv("MONGO_DBNAME"))
-MONGO_DSN = os.getenv("MONGO_DSN")
 
-connection = MongoClient(MONGO_DSN, tlsCAFile=certifi.where())
+connection = MongoClient("mongodb://mongodb:27017")
 db = connection[MONGO_DBNAME]
 
 acc_validator = {
@@ -36,8 +36,21 @@ mess_validator = {
     }
 }
 
+rec_validator = {
+    "$jsonSchema": {
+        "bsonType": "object",
+        "required": ["filename", "audioData"],
+        "properties": {
+            "filename": {"bsonType": "string"},
+            "audioData": {"bsonType": "binData"},
+        },
+    }
+}
+
+
 accounts = db.accounts
 messages = db.messages
+recordings = db.recordings
 
 # db.command('collMod', 'accounts', validator=acc_validator)
 # db.command('collMod', 'messages', validator=mess_validator)

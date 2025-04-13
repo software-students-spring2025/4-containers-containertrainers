@@ -19,9 +19,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 ADD . .
 
-RUN mkdir -p /app/recordings
-VOLUME ["/app/recordings"]
-
 EXPOSE 3000
 
 ENV MONGO_DSN =mongodb+srv://nb3460:9paNoydyVz52hqhO@cluster0.zfwsq7e.mongodb.net/Speech2Text?retryWrites=true&w=majority&appName=Cluster0
