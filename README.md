@@ -27,7 +27,7 @@
 then run
 ```
 docker build -t speechily-audio-recorder .
-docker volume create recordings
+
 docker run -p 5000:5000 -v recordings:/app/recordings speechily-audio-recorder
 ```
 open your browser to the localhost:5000 http address you see.
