@@ -5,6 +5,7 @@ import pytest
 import speech_recognition as sr
 import client
 
+@patch("client.collection")
 @patch("client.sr.Microphone")
 @patch("client.recognizer.listen")
 @patch("client.recognizer.recognize_google")
