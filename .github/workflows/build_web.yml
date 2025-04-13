@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.9", "3.11"]
-    
+
     steps:
       - uses: actions/checkout@v4
 
@@ -15,11 +15,13 @@ jobs:
         uses: kojoru/prepare-pipenv@v1
         with:
           python-version: ${{ matrix.python-version }}
-        
+
       - name: install dependencies
-        run: pipenv install --dev
-        run: pipenv install -r web-app/requirements.txt
+        run: |
+          pipenv install --dev
+          pipenv install -r web-app/requirements.txt
 
       - name: run tests
-        run: pipenv install pytest
-        run: pipenv run pytest web-app/src/test_app.py
+        run: |
+          pipenv install pytest
+          pipenv run pytest web-app/src/test_app.py
