@@ -16,7 +16,7 @@ jobs:
           pip install pipenv
           pipenv install --dev
           pipenv install -r web-app/requirements.txt
-      - name: run tests
-        run: |
-          pipenv install pytest
-          # run: pipenv run pytest web-app/test_client.py
+      # - name: run tests
+      #   run: |
+      #     pipenv install pytest
+      # run: pipenv run pytest web-app/test_client.py
