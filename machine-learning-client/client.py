@@ -43,15 +43,15 @@ def process_audio():
         print(f"Summary: {summary}")
 
     except (KeyError, ValueError) as e:
-        print(f"Summarization failed: {e}")
+        print(f"Summarization failed: {e}") # pylint: disable=broad-exception-caught
         return
     except sr.UnknownValueError:
         print("Could not understand audio")
         return
     except sr.RequestError as e:
-        print(f"Google Speech API error: {e}")
+        print(f"Google Speech API error: {e}") # pylint: disable=broad-exception-caught
         return
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-exception-caught
         print(f"Unexpected error: {e}")
         return
 
@@ -71,4 +71,3 @@ def process_audio():
 
 if __name__ == "__main__":
     process_audio()
-    
