@@ -2,12 +2,14 @@
 transcribes them, summarizes them, and writes results into 'messages'.
 """
 
+# pylint: disable=import-error
+
 from datetime import datetime, timezone
 import io
 from pymongo import MongoClient
 import speech_recognition as sr
 from transformers import pipeline
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
