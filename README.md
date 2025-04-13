@@ -50,7 +50,8 @@ docker compose-up --build
 2. Run Tests
 
 ```shell
-docker exec -it . pytest
+docker exec -it web-app pytest
+docker exec -it machine-learning-client pytest
 ```
 
 Access the web interface at http://127.0.0.1:3000
@@ -83,7 +84,7 @@ pip install -r requirements.txt
 3. Create and populate your .env file in the project directory
 
 ```shell
-MONGO_URI=[your connection string]
+MONGO_URI=mongodb://localhost:27017/
 MONGO_DBNAME=speech2text
 PORT=3000
 ```
@@ -93,6 +94,7 @@ PORT=3000
 5. Run Application
 
 ```shell
+cd web-app
 cd src
 python3 app.py
 ```
@@ -100,7 +102,8 @@ python3 app.py
 6. Run Tests
 
 ```shell
-pytest tests/
+pytest web-app/src/test_app.py
+pytest machine-learning-client/test_client.py
 ```
 
 Access the web interface at http://127.0.0.1:3000

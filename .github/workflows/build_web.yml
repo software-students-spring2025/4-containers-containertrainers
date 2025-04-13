@@ -7,17 +7,19 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.9", "3.11"]
-    # defaults:
-    # run:
-    #   working-directory: ./web-app
+    
     steps:
-      - name: checkout repo
-        uses: actions/checkout@v4
-      # - name: setup docker
-      #   uses: docker/setup-buildx-action@v3
-      - name: build app
-        run: docker build -t web-app ./web-app
-      - name: run app
-        run: docker run --rm web-app
+      - uses: actions/checkout@v4
+
+      - name: Install Python, pipenv and Pipfile packages
+        uses: kojoru/prepare-pipenv@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+        
+      - name: install dependencies
+        run: pipenv install --dev
+        run: pipenv install -r web-app/requirements.txt
+
       - name: run tests
-        run: docker exec -it web-app pytest
+        run: pipenv install pytest
+        run: pipenv run pytest web-app/src/test_app.py
