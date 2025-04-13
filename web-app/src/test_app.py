@@ -1,6 +1,6 @@
 # pylint: disable=import-error,redefined-outer-name
 
-"""Test suite for the Flask web application"""
+"""Test suiete for the Flask web application"""
 
 import os
 import sys
