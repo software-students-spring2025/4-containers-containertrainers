@@ -12,7 +12,9 @@ import pytest
 
 # Add client module path
 sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), "../../machine-learning-client"))
+    os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "../../machine-learning-client")
+    )
 )
 
 # Load the app module dynamically
@@ -50,7 +52,9 @@ def test_signup_post_success(mock_accounts, test_client):
     """Test POST request to signup with a new user."""
     mock_accounts.find_one.return_value = None
     response = test_client.post(
-        "/signup", data={"username": "testuser", "password": "testpass"}, follow_redirects=True
+        "/signup",
+        data={"username": "testuser", "password": "testpass"},
+        follow_redirects=True,
     )
     assert response.status_code == 200
     mock_accounts.insert_one.assert_called_once()
@@ -88,7 +92,9 @@ def test_login_post_success(mock_accounts, _, test_client):
         "password": "hashedpass",
     }
     response = test_client.post(
-        "/login", data={"username": "testuser", "password": "testpass"}, follow_redirects=True
+        "/login",
+        data={"username": "testuser", "password": "testpass"},
+        follow_redirects=True,
     )
     assert response.status_code == 200
 
@@ -171,9 +177,7 @@ def test_upload_audio_success(mock_recordings, test_client):
 def test_get_result(_, mock_mongo_client, test_client):
     """Test the result route after transcription."""
     mock_messages = MagicMock()
-    mock_messages.find_one.return_value = {
-        "transcript": "hello", "summary": "hi"
-    }
+    mock_messages.find_one.return_value = {"transcript": "hello", "summary": "hi"}
 
     fake_db = {"messages": mock_messages}
     instance = mock_mongo_client.return_value
